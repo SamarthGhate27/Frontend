@@ -4,7 +4,24 @@ import Image from "next/image";
 import { ArrowLeft, Clock, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-const recentResources = [
+// ── Type for a recently-added resource ────────────────────────────────────────
+// When the backend exposes a /resources/recent (or similar) endpoint,
+// import apiFetch from "@/lib/api" and replace MOCK_RESOURCES below with
+// a real useEffect fetch, just like the other pages in this folder.
+export type RecentResource = {
+  id: string | number;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  added: string;
+  type: string;
+};
+
+// ── TEMPORARY: isolated mock data ─────────────────────────────────────────────
+// Replace this array with a real API call once the backend exposes the endpoint.
+// Do NOT spread this data into the category API — it is completely separate.
+const MOCK_RECENT_RESOURCES: RecentResource[] = [
   {
     id: 1,
     title: "Getting Started with React",
@@ -69,6 +86,18 @@ const recentResources = [
 
 export default function RecentlyAddedPage() {
   const router = useRouter();
+
+  // TODO: Replace MOCK_RECENT_RESOURCES with a real API call when the backend
+  // exposes an endpoint such as GET /resources/recent.
+  // Example:
+  //   const [recentResources, setRecentResources] = useState<RecentResource[]>([]);
+  //   useEffect(() => {
+  //     apiFetch("/resources/recent")
+  //       .then(r => r.ok ? r.json() : [])
+  //       .then(setRecentResources)
+  //       .catch(console.error);
+  //   }, []);
+  const recentResources = MOCK_RECENT_RESOURCES;
 
   return (
     <div className="min-h-screen bg-white px-5 py-5 font-roboto md:px-7 lg:px-8">

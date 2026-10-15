@@ -1,18 +1,33 @@
 "use client"
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Field } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import Image from "next/image";
 import Link from "next/link";
-
-import {useRouter} from "next/navigation"
+import { useRouter } from "next/navigation"
+import { Check, ChevronDown, Eye, Star } from "lucide-react";
+import { apiFetch } from "@/lib/api";
+import type { Category } from "@/types/category";
 
 
 export default function KnowledgeCenter() {
 
   const router = useRouter();
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    apiFetch("/categories")
+      .then((res) => (res.ok ? res.json() : Promise.reject()))
+      .then((data: Category[]) => setCategories(data))
+      .catch(() => {
+        // Non-fatal: category cards simply stay empty while
+        // the rest of the page still renders normally.
+        console.error("[KnowledgeCenter] Failed to load categories");
+      });
+  }, []);
+
   return (
     <>
     <div className="flex">
@@ -58,152 +73,33 @@ export default function KnowledgeCenter() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 h-auto justify-between w-full max-w-7xl:w-full mx-auto px-4 text-white lg:h-auto">
 
-            <Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/frontend.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-bold pl-1 mt-2 font-roboto text-[13px] ">Frontend</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
+            {categories.map((category) => (
+              <Link
+                key={category.id}
+                href={`/dashboard/knowledge-center/categories/resources?categoryId=${category.id}`}
+              >
+                <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
+                  <div className="flex">
+                    {category.image?.url ? (
+                      <img
+                        src={category.image.url}
+                        alt={category.name}
+                        width={40}
+                        height={40}
+                        className="m-2 mt-2 object-contain"
+                      />
+                    ) : (
+                      <div className="m-2 mt-2 h-10 w-10 flex items-center justify-center bg-indigo-100 rounded" />
+                    )}
+                    <div>
+                      <h1 className="text-slate-700 font-bold pl-1 mt-2 font-roboto text-[13px] ">{category.name}</h1>
+                      <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">{category.resourceCount}+ resources</span>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
 
-<Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-green-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/backend.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">Backend</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
-
-<Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-purple-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/database.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">Database</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
-
-<Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-yellow-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/aiml.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">AI & ML</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
-
-<Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/cloud.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-bold pl-1 mt-2 font-roboto text-[13px]">Cloud Computing</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
-
-<Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-green-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/devops.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">DevOps</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
-
-<Link href="/dashboard/knowledge-center/categories/resources">
-  <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
-    <div className="flex">
-      <img src="/images/cyber-security.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-      <div>
-        <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">Cyber Security</h1>
-        <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-      </div>
-    </div>
-  </div>
-</Link>
-            {/* <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/frontend.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-bold pl-1 mt-2 font-roboto text-[13px] ">Frontend</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-green-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/backend.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">Backend</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-purple-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/database.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">Database</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-yellow-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/aiml.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">AI & ML</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/cloud.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-bold pl-1 mt-2 font-roboto text-[13px]">Cloud Computing</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1 ">76+ recources</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-green-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/devops.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">DevOps</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-                </div>
-              </div>
-            </div>
-            <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
-              <div className="flex">
-                <img src="/images/cyber-security.png" alt="" width={40} height={40} className="m-2 mt-2"/>
-                <div>
-                  <h1 className="text-slate-700 font-semibold pl-1 mt-2 font-roboto text-[13px]">Cyber Security</h1>
-                  <span className="text-gray-500 font-dmserif text-[12px] font-semibold pl-1">76+ recources</span>
-                </div>
-              </div>
-            </div> */}
             <div className="h-12 w-45 mt-5 ">
                <button className="text-[12px] text-black bg-mist-200 h-12 w-45  rounded-xl cursor-pointer font-semibold  
                 font-roboto"  onClick={() =>
@@ -311,9 +207,6 @@ export function Recents(){
 
 
 
-import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-
 export function Dropdown() {
   const [open, setOpen] = useState(false);
 
@@ -359,13 +252,7 @@ export function Dropdown() {
 
 
 
-
-import {
-  Eye,
-  Star,
-} from "lucide-react";
-
-const resources = [
+const popularResources = [
   {
     title: "JavaScript Interview Questions and Answers",
     image: "/images/javascript.png",
@@ -407,7 +294,7 @@ export  function PopularResources() {
   return (
     <div className="w-full lg:w-80 lg:h-100 rounded-xl bg-white">
 
-      {resources.map((resource, index) => (
+      {popularResources.map((resource, index) => (
         <div
           key={index}
           className="flex min-h-8.75 items-center gap-5 border-b border-slate-200 px-3 py-1 last:border-b-0 hover:bg-slate-50"
@@ -476,8 +363,6 @@ export  function PopularResources() {
 
 
 
-
-import { Check } from "lucide-react";
 
 const learningPath = [
   {
