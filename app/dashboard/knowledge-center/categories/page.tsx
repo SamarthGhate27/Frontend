@@ -138,11 +138,12 @@ export default function CategoriesPage() {
 
             <Link
               key={category.id}
-              href={`/dashboard/knowledge-center/categories/resources?categoryId=${category.id}`}
+              href={`/dashboard/knowledge-center/categories/courses?categoryId=${category.id}`}
               className={`${cardBg(index)} group rounded-2xl p-4 transition duration-200 hover:-translate-y-1 hover:shadow-md`}
             >
 
               {/* IMAGE */}
+              
               <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-white shadow-sm">
                 {category.image?.url ? (
                   <Image
