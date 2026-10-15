@@ -126,7 +126,7 @@ export default function ResourcesPage() {
             </span>
 
             <h1 className="mt-1 text-2xl font-semibold text-slate-800">
-              Frontend Courses
+              Frontend Resources
             </h1>
 
             <p className="mt-1 text-[13px] text-gray-500">
@@ -139,7 +139,7 @@ export default function ResourcesPage() {
             <BookOpen size={16} className="text-blue-600" />
 
             <span className="text-[12px] font-semibold text-slate-700">
-              {resources.length} Courses
+              {resources.length} Resources
             </span>
           </div>
 
@@ -159,7 +159,7 @@ export default function ResourcesPage() {
 
           <input
             type="text"
-            placeholder="Search courses..."
+            placeholder="Search resources..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-11 pr-4 text-[12px] text-slate-700 outline-none transition placeholder:text-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -176,14 +176,11 @@ export default function ResourcesPage() {
         </button>
 
         <button
-      type="button"
-      onClick={() =>
-        router.push("/dashboard/knowledge-center/categories/add_course")
-      }
-      className="h-10 rounded-xl bg-blue-600 px-4 text-[11px] font-semibold text-white hover:bg-blue-700"
-    >
-      + Add Courses
-    </button>
+  type="button"
+  className="h-10 rounded-xl bg-blue-600 px-4 text-[11px] font-semibold text-white hover:bg-blue-700"
+>
+  + Add Resources
+</button>
 
       </div>
 
@@ -215,7 +212,7 @@ export default function ResourcesPage() {
       <div className="mb-3 flex items-center justify-between">
 
         <h2 className="text-[14px] font-semibold text-slate-700">
-          Available Courses
+          Available Resources
         </h2>
 
         <span className="text-[11px] font-medium text-gray-400">
@@ -293,7 +290,7 @@ export default function ResourcesPage() {
               className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-[10px] font-semibold text-blue-600 transition hover:bg-indigo-50"
             >
               <Eye size={13} />
-              View Courses
+              View Resource
             </button>
 
           </div>
@@ -312,7 +309,7 @@ export default function ResourcesPage() {
             />
 
             <h3 className="text-[13px] font-semibold text-slate-700">
-              No Courses found
+              No resources found
             </h3>
 
             <p className="mt-1 text-[11px] text-gray-400">
