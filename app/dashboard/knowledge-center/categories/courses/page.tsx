@@ -133,7 +133,7 @@ async function loadData() {
 
   try {
     // Fetch only the selected category.
-    const catRes = await apiFetch(`/categories/${categoryId}`);
+    const catRes = await apiFetch(`/categories`);
 
     if (!catRes.ok) {
       const msg = await getErrorMessage(catRes);
