@@ -76,7 +76,7 @@ export default function KnowledgeCenter() {
             {categories.map((category) => (
               <Link
                 key={category.id}
-                href={`/dashboard/knowledge-center/categories/resources?categoryId=${category.id}`}
+                href={`/dashboard/knowledge-center/categories/courses?categoryId=${category.id}`}
               >
                 <div className="bg-indigo-50 h-14 w-45 mt-5 rounded-2xl">
                   <div className="flex">

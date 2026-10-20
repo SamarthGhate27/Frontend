@@ -26,6 +26,50 @@ type Course = {
   image?: string;
   category?: string;
 };
+
+const HARDCODED_COURSES: Course[] = [
+  {
+    id: "1",
+    title: "HTML & CSS Fundamentals",
+    description: "Learn the basics of HTML and CSS to build web pages.",
+    type: "Tutorial",
+    level: "Beginner",
+    duration: "4 hours",
+    image: "/images/frontend.png",
+    category: "Frontend",
+  },
+  {
+    id: "2",
+    title: "JavaScript for Beginners",
+    description: "Understand JavaScript and make websites interactive.",
+    type: "Guide",
+    level: "Beginner",
+    duration: "6 hours",
+    image: "/images/javascript.png",
+    category: "Frontend",
+  },
+  {
+    id: "3",
+    title: "React.js Complete Guide",
+    description: "Learn React components, props, state, and hooks.",
+    type: "Tutorial",
+    level: "Intermediate",
+    duration: "8 hours",
+    image: "/images/react.png",
+    category: "Frontend",
+  },
+  {
+    id: "4",
+    title: "Database Management Basics",
+    description: "Learn database concepts and SQL fundamentals.",
+    type: "Documentation",
+    level: "Beginner",
+    duration: "5 hours",
+    image: "/images/database.png",
+    category: "Database",
+  },
+];
+
 const filters = ["All", "Guides", "Tutorials", "Documentation"];
 function CoursesContent() {
   const router = useRouter();
@@ -47,38 +91,71 @@ function CoursesContent() {
       });
       return;
     }
-    async function loadData() {
-      setLoading(true);
-      setError(null);
-      try {
-        // Fetch category detail and its courses in parallel
-        const [catRes, resRes] = await Promise.all([
-          apiFetch(`/categories/${categoryId}`),
-          apiFetch(`/categories/${categoryId}/courses`),
-        ]);
-        if (!catRes.ok) {
-          const msg = await getErrorMessage(catRes);
-          throw new Error(msg);
-        }
-        const catData: Category = await catRes.json();
-        setCategory(catData);
-        if (resRes.ok) {
-          const resData: Course[] = await resRes.json();
-          setCourses(resData);
-        } else {
-          // Courses endpoint not yet available or returned empty — not fatal
-          console.warn("[CoursesPage] courses endpoint returned:", resRes.status);
-          setCourses([]);
-        }
-      } catch (err) {
-        console.error("[CoursesPage] load error:", err);
-        setError(
-          err instanceof Error ? err.message : "Failed to load category data."
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
+//     async function loadData() {
+//       setLoading(true);
+//       setError(null);
+//       try {
+//         // Fetch category detail and its courses in parallel
+//         const [catRes, resRes] = await Promise.all([
+//           apiFetch(`/categories/${categoryId}`),
+//           apiFetch(`/categories/${categoryId}/courses`),
+//         ]);
+//         if (!catRes.ok) {
+//           const msg = await getErrorMessage(catRes);
+//           throw new Error(msg);
+//         }
+//         const catData: Category = await catRes.json();
+//         setCategory(catData);
+//         if (resRes.ok) {
+//           const resData: Course[] = await resRes.json();
+//           setCourses(resData);
+//         } else {
+//           // Courses endpoint not yet available or returned empty — not fatal
+//           console.warn("[CoursesPage] courses endpoint returned:", resRes.status);
+//           setCourses([]);
+//         }
+//       } catch (err) {
+//         console.error("[CoursesPage] load error:", err);
+//         setError(
+//           err instanceof Error ? err.message : "Failed to load category data."
+//         );
+//       } finally {
+//         setLoading(false);
+//       }
+//     }
+
+async function loadData() {
+  setLoading(true);
+  setError(null);
+
+  // Courses come from hardcoded data.
+  setCourses(HARDCODED_COURSES);
+
+  try {
+    // Fetch only the selected category.
+    const catRes = await apiFetch(`/categories/${categoryId}`);
+
+    if (!catRes.ok) {
+      const msg = await getErrorMessage(catRes);
+      throw new Error(msg);
+    }
+
+    const catData: Category = await catRes.json();
+
+    setCategory(catData);
+  } catch (err) {
+    console.error("[CoursesPage] load error:", err);
+
+    setError(
+      err instanceof Error
+        ? err.message
+        : "Failed to load category data."
+    );
+  } finally {
+    setLoading(false);
+  }
+}
+
     loadData();
   }, [categoryId]);
   const filteredCourses = courses.filter((course) => {
@@ -173,7 +250,7 @@ function CoursesContent() {
               Latest
             </button>
             <button onClick={() =>
-        router.push("/dashboard/knowledge-center/categories/add-course")
+        router.push("/dashboard/knowledge-center/categories/courses/add-course")
       }
               type="button"
               className="h-10 rounded-xl bg-blue-600 px-4 text-[11px] font-semibold text-white hover:bg-blue-700"
