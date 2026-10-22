@@ -249,14 +249,24 @@ async function loadData() {
               <SlidersHorizontal size={14} />
               Latest
             </button>
-            <button onClick={() =>
-        router.push("/dashboard/knowledge-center/categories/courses/add-course")
-      }
-              type="button"
-              className="h-10 rounded-xl bg-blue-600 px-4 text-[11px] font-semibold text-white hover:bg-blue-700"
-            >
-              + Add Courses
-            </button>
+            <button
+  onClick={() => {
+    const categoryId = searchParams.get("categoryId");
+
+    if (!categoryId) {
+      alert("Category ID is missing");
+      return;
+    }
+
+    router.push(
+      `/dashboard/knowledge-center/categories/courses/add-course?categoryId=${encodeURIComponent(categoryId)}`
+    );
+  }}
+  type="button"
+  className="h-10 rounded-xl bg-blue-600 px-4 text-[11px] font-semibold text-white hover:bg-blue-700"
+>
+  + Add Courses
+</button>
           </div>
           {/* FILTERS */}
           <div className="mb-6 flex flex-wrap gap-2">

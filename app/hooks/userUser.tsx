@@ -1,6 +1,8 @@
 "use client"
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/api";
+import { useRouter, useSearchParams } from "next/navigation";
+
 
 export function useUser() {
   const [name, setName] = useState("Loading...");
@@ -14,3 +16,6 @@ export function useUser() {
 
   return name;
 }
+
+const router = useRouter();
+const searchParams = useSearchParams();
